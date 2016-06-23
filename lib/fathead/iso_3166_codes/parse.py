@@ -1,10 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Released under the GPL v2 license 
+# Released under the GPL v2 license
 # https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
-import lxml.etree, lxml.html
+import lxml.etree
+import lxml.html
 import re
 
 from unidecode import unidecode
@@ -16,27 +17,30 @@ article_type = "A"
 outp = "output.txt"
 inp = "download/raw.data"
 
-#Open input file
-input_file = open( inp, "r" )
+# Open input file
+input_file = open(inp, "r")
 
-#Read and throw out first line
+# Read and throw out first line
 input_file.readline()
 
-output_file = open( outp, "w")
+output_file = open(outp, "w")
 
-#Loop thru the remainder of the file, format each line
-#and print it to the output file.
-for line in input_file.readlines() :
-	line = line.strip();
-	pair = line.split( ';' );
-	if len( pair ) < 2 :
-		continue;
+# Loop thru the remainder of the file, format each line
+# and print it to the output file.
+for line in input_file.readlines():
+    line = line.strip()
+    pair = line.split(";")
+    if len(pair) < 2:
+        continue
 
         pair[0] = unidecode(pair[0])
-        
-        abstract = "\"" + pair[1] + "\" is the ISO 3166 country code for \"" + pair[0].title() + ".\""
-	
-        output_file.write( "\t".join([
+
+        country_code = pair[1]
+        country = pair[0].title()
+        message = "\"{}\" is the ISO 3166 country code for \"{}\"."
+        abstract = message.format(country_code, country)
+
+        output_file.write("\t".join([
             pair[1],        # Title
             article_type,   # Type
             '',             # Redirect
@@ -50,10 +54,9 @@ for line in input_file.readlines() :
             '',             # Images
             abstract,       # Abstract
             url,            # Source URL
-            ] ))
+            ]))
 
-        output_file.write( "\n" );
+        output_file.write("\n")
 
-input_file.close();
-output_file.close();
-
+input_file.close()
+output_file.close()
